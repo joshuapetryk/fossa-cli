@@ -17,6 +17,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-gopkg-cache-{{ checksum "Gopkg.lock" }}
+      - run: go get github.com/jstemmer/go-junit-report
       - run:
           name: Compile CLI
           command: |
@@ -35,7 +36,7 @@ jobs:
             # Load shell helpers (e.g. sdkman)
             source /home/fossa/.bashrc
             # Run tests
-            go test ./builders
+            go test ./builders | go-junit-report > ${TEST_RESULTS}/go-test-report.xml
       - run:
           name: Run FOSSA build
           command: |
